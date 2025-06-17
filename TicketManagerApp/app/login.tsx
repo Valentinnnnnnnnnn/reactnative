@@ -1,7 +1,6 @@
 import { signIn } from '@/services/firebase.auth'
-import { useRouter } from 'expo-router'
 import React from 'react'
-import { Button, TextInput, View } from 'react-native'
+import { ActivityIndicator, Button, Text, TextInput, View } from 'react-native'
 
 export default function Login() {
   const [email, setEmail] = React.useState('')
@@ -13,8 +12,6 @@ export default function Login() {
     setIsLoading(true)
     try {
       await signIn(email, password)
-      const router = useRouter()
-      router.push('/home')
     } catch (error) {
       setError(
         'Login failed. Please check your credentials or contact your administrator.'
@@ -25,10 +22,15 @@ export default function Login() {
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', padding: 20 }}>
+      {error && <Text style={{ color: 'red', marginBottom: 10 }}>{error}</Text>}
       <TextInput
         placeholder="Email"
         value={email}
-        onChangeText={setEmail}
+        onChangeText={(text) => {
+          if (error) setError(null)
+          setEmail(text)
+        }}
+        editable={!isLoading}
         autoCapitalize="none"
         keyboardType="email-address"
         style={{
@@ -42,7 +44,11 @@ export default function Login() {
       <TextInput
         placeholder="Password"
         value={password}
-        onChangeText={setPassword}
+        onChangeText={(text) => {
+          if (error) setError(null)
+          setPassword(text)
+        }}
+        editable={!isLoading}
         secureTextEntry
         style={{
           marginBottom: 20,
@@ -52,7 +58,18 @@ export default function Login() {
           borderRadius: 5,
         }}
       />
-      <Button title="Sign In" onPress={handleSignIn} />
+      {isLoading ? (
+        <ActivityIndicator size="large" />
+      ) : (
+        <Button
+          title="Sign In"
+          onPress={() => {
+            if (error) setError(null)
+            handleSignIn()
+          }}
+          disabled={isLoading}
+        />
+      )}
     </View>
   )
 }

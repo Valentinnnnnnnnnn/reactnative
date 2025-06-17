@@ -1,5 +1,6 @@
 import { auth } from "@/config/firebase.config";
-import { onAuthStateChanged, signInWithEmailAndPassword, UserCredential } from "firebase/auth";
+import { useRouter } from "expo-router";
+import { signInWithEmailAndPassword, UserCredential } from "firebase/auth";
 
 export async function signIn(email: string, password: string): Promise<UserCredential> {
     if (!email || !password) {
@@ -11,6 +12,8 @@ export async function signIn(email: string, password: string): Promise<UserCrede
         throw new Error('Sign in failed');
     }
     console.log('User signed in:', userCredential.user);
+    const router = useRouter()
+    router.push('/home')
     return userCredential;
 
 }
