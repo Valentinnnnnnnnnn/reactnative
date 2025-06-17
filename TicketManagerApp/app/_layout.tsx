@@ -1,42 +1,21 @@
+import { useColorScheme } from '@/hooks/useColorScheme'
+import AuthProvider from '@/utils/AuthProvider'
 import {
   DarkTheme,
   DefaultTheme,
   ThemeProvider,
 } from '@react-navigation/native'
-import { useFonts } from 'expo-font'
-import { Stack } from 'expo-router'
-import { StatusBar } from 'expo-status-bar'
-import 'react-native-reanimated'
-
-import { useColorScheme } from '@/hooks/useColorScheme'
+import { Slot } from 'expo-router'
+import React from 'react'
 
 export default function RootLayout() {
   const colorScheme = useColorScheme()
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  })
-
-  if (!loaded) {
-    // Async font loading only occurs in development.
-    return null
-  }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen
-          name="login"
-          options={{
-            title: 'Login',
-            headerTitleAlign: 'center',
-            headerStyle: {
-              backgroundColor: colorScheme === 'dark' ? '#000' : '#fff',
-            },
-            headerTintColor: colorScheme === 'dark' ? '#fff' : '#000',
-          }}
-        />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <Slot />
+      </ThemeProvider>
+    </AuthProvider>
   )
 }

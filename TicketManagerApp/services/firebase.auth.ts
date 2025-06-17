@@ -1,5 +1,5 @@
 import { auth } from "@/config/firebase.config";
-import { signInWithEmailAndPassword, UserCredential } from "firebase/auth";
+import { onAuthStateChanged, signInWithEmailAndPassword, UserCredential } from "firebase/auth";
 
 export async function signIn(email: string, password: string): Promise<UserCredential> {
     if (!email || !password) {

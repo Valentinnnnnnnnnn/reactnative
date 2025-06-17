@@ -1,20 +1,21 @@
 import { signIn } from '@/services/firebase.auth'
-import { UserCredential } from 'firebase/auth'
 import React from 'react'
 import { Button, TextInput, View } from 'react-native'
 
 export default function Login() {
   const [email, setEmail] = React.useState('')
   const [password, setPassword] = React.useState('')
+  const [error, setError] = React.useState<string | null>(null)
+  const [isLoading, setIsLoading] = React.useState(false)
 
   const handleSignIn = async () => {
+    setIsLoading(true)
     try {
-     const test: UserCredential = await signIn(email, password)
-      console.log('Sign in result:', test)
-      alert('Sign in successful!')
+      await signIn(email, password)
     } catch (error) {
-      alert(error)
+      setError('Login failed. Please check your credentials or contact your administrator.')
     }
+    setIsLoading(false)
   }
 
   return (
