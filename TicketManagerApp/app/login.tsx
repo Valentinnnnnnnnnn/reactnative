@@ -1,4 +1,5 @@
 import { signIn } from '@/services/firebase.auth'
+import { useRouter } from 'expo-router'
 import React from 'react'
 import { Button, TextInput, View } from 'react-native'
 
@@ -12,8 +13,12 @@ export default function Login() {
     setIsLoading(true)
     try {
       await signIn(email, password)
+      const router = useRouter()
+      router.push('/home')
     } catch (error) {
-      setError('Login failed. Please check your credentials or contact your administrator.')
+      setError(
+        'Login failed. Please check your credentials or contact your administrator.'
+      )
     }
     setIsLoading(false)
   }
