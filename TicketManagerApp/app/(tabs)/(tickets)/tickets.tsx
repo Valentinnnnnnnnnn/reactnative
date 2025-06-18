@@ -2,6 +2,7 @@ import { CreateTicket } from '@/components/buttons/CreateTicket'
 import { Ticket } from '@/components/ui/Ticket'
 import { db, getMyTickets } from '@/services/db'
 import { TicketType } from '@/types/ticket'
+import { useRouter } from 'expo-router'
 import React from 'react'
 import { FlatList, GestureHandlerRootView } from 'react-native-gesture-handler'
 
@@ -31,9 +32,14 @@ export default function Home() {
     loadTickets()
   }, [])
 
+  const router = useRouter()
+  function redirectfun() {
+    router.push('./create')
+  }
+
   return (
     <>
-      <CreateTicket />
+      <CreateTicket redirect={redirectfun} />
       <GestureHandlerRootView style={{ flex: 1 }}>
         <FlatList
           data={tickets}

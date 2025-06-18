@@ -5,8 +5,8 @@ import {
   DefaultTheme,
   ThemeProvider,
 } from '@react-navigation/native'
+import { Tabs } from 'expo-router'
 import React from 'react'
-import Tickets from './tickets'
 
 export default function RootLayout() {
   const colorScheme = useColorScheme()
@@ -14,7 +14,16 @@ export default function RootLayout() {
   return (
     <AuthProvider>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Tickets />
+        <Tabs
+          screenOptions={{
+            headerShown: false,
+            tabBarStyle: { display: 'none' },
+          }}
+        >
+          <Tabs.Screen name="tickets" options={{ title: 'Tickets' }} />
+          <Tabs.Screen name="create" options={{ title: 'Create' }} />
+          <Tabs.Screen name="[id]" options={{ title: 'Ticket Detail' }} />
+        </Tabs>
       </ThemeProvider>
     </AuthProvider>
   )
