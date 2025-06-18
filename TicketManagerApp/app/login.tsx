@@ -1,5 +1,7 @@
+import { auth } from '@/config/firebase.config'
 import { signIn } from '@/services/auth'
-import React from 'react'
+import { useRouter } from 'expo-router'
+import React, { useEffect } from 'react'
 import { ActivityIndicator, Button, Text, TextInput, View } from 'react-native'
 
 export default function Login() {
@@ -7,6 +9,7 @@ export default function Login() {
   const [password, setPassword] = React.useState('')
   const [error, setError] = React.useState<string | null>(null)
   const [isLoading, setIsLoading] = React.useState(false)
+  const router = useRouter()
 
   const handleSignIn = async () => {
     setIsLoading(true)
@@ -19,6 +22,16 @@ export default function Login() {
     }
     setIsLoading(false)
   }
+
+  useEffect(() => {
+    // Check if user is already signed in
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        router.push('/home')
+      }
+    })
+    return () => unsubscribe() // Cleanup subscription on unmount
+  }, [router])
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', padding: 20 }}>
