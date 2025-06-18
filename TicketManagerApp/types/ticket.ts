@@ -6,11 +6,24 @@ export type TicketType = {
   priority: priorityType
   category: categoryType
   assignedTo?: string
-  dueDate: string
+  dueDate: Date
   location?: string
   deviceInfo?: string
+  createdAt?: Date
+  updatedAt?: Date
+  createdBy?: string
 }
 
-export type statusType = 'new' | 'assigned' | 'in-progress' | 'resolved' | 'closed'
+export type statusType =
+  | 'new'
+  | 'assigned'
+  | 'in-progress'
+  | 'resolved'
+  | 'closed'
 export type priorityType = 'low' | 'medium' | 'high' | 'critical'
-export type categoryType = 'hardware' | 'software' | 'network' | 'access' | 'other'
+export type categoryType =
+  | 'hardware'
+  | 'software'
+  | 'network'
+  | 'access'
+  | 'other'

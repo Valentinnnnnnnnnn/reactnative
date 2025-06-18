@@ -1,8 +1,11 @@
 import { TicketType } from '@/types/ticket'
+import { useRouter } from 'expo-router'
 import React from 'react'
 import { Text, TouchableOpacity } from 'react-native'
 
 export function Ticket({ id, title, status, priority, category }: TicketType) {
+  const router = useRouter()
+
   return (
     <TouchableOpacity
       style={{
@@ -13,7 +16,7 @@ export function Ticket({ id, title, status, priority, category }: TicketType) {
         marginVertical: 8,
       }}
       onPress={() => {
-        console.log('Redirecting to ticket with id:', id)
+        router.push(`/(tickets)/${id}`)
       }}
     >
       <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 4 }}>

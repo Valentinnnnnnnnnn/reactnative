@@ -1,6 +1,9 @@
-import { TicketType, categoryType, priorityType } from '@/types/ticket'
+import { createTicket, db, updateTicket } from '@/services/db'
+import { categoryType, priorityType, statusType } from '@/types/ticket'
+import { TicketFormProps } from '@/types/ticketForm'
 import React, { useState } from 'react'
 import {
+  ActivityIndicator,
   Modal,
   ScrollView,
   StyleSheet,
@@ -12,11 +15,6 @@ import {
 import DateTimePickerModal from 'react-native-modal-datetime-picker'
 import { SubmitTicket } from '../buttons/SubmitTicket'
 
-interface TicketFormProps {
-  editMode?: boolean
-  initialData?: TicketType
-}
-
 export function TicketForm({ editMode = false, initialData }: TicketFormProps) {
   const [title, setTitle] = useState(initialData?.title || '')
   const [description, setDescription] = useState(initialData?.description || '')
@@ -26,29 +24,84 @@ export function TicketForm({ editMode = false, initialData }: TicketFormProps) {
   const [category, setCategory] = useState<categoryType>(
     initialData?.category || 'hardware'
   )
-  const [dueDate, setDueDate] = useState<Date | null>(
-    initialData?.dueDate ? new Date(initialData.dueDate) : null
+  const [dueDate, setDueDate] = useState<Date>(
+    initialData?.dueDate
+      ? new Date(initialData.dueDate)
+      : new Date(new Date().setDate(new Date().getDate() + 7))
   )
   const [location, setLocation] = useState(initialData?.location || '')
   const [showDatePicker, setShowDatePicker] = useState(false)
   const [showPrioritySelector, setShowPrioritySelector] = useState(false)
   const [showCategorySelector, setShowCategorySelector] = useState(false)
   const [showStatusSelector, setShowStatusSelector] = useState(false)
-  const [status, setStatus] = useState<
-    'new' | 'assigned' | 'in-progress' | 'resolved' | 'closed'
-  >(initialData?.status || 'new')
+  const [status, setStatus] = useState<statusType>(initialData?.status || 'new')
   const [assignedTo, setAssignedTo] = useState(initialData?.assignedTo || '')
   const [deviceInfo, setDeviceInfo] = useState(initialData?.deviceInfo || '')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
-  const handleSubmit = () => {
-    console.log(editMode ? 'Ticket updated:' : 'Ticket submitted:', {
+  function resetData() {
+    setTitle('')
+    setDescription('')
+    setPriority('low')
+    setCategory('hardware')
+    setDueDate(new Date())
+    setLocation('')
+    setAssignedTo('')
+    setDeviceInfo('')
+    setStatus('new')
+  }
+
+  async function handleSubmit(): Promise<void> {
+    setLoading(true)
+    setError('')
+
+    if (!title.trim() || !description.trim()) {
+      alert('Veuillez remplir tous les champs obligatoires.')
+      setLoading(false)
+      return
+    }
+
+    const ticketData = {
+      id: '',
       title,
       description,
       priority,
       category,
-      dueDate,
+      dueDate: dueDate,
       location,
-    })
+      status,
+      assignedTo,
+      deviceInfo,
+    }
+
+    try {
+      if (editMode) {
+        await updateTicket({ db, ticketData })
+      } else {
+        await createTicket({ db, ticketData })
+      }
+      // Optionnellement, réinitialisez le formulaire ou naviguez vers une autre page
+    } catch (error) {
+      console.error(error)
+      setError(
+        'Une erreur est survenue lors de la soumission du ticket.' + error
+      )
+    } finally {
+      if (error) {
+        setLoading(false)
+        alert(error)
+        return
+      } else {
+        resetData()
+        alert(
+          editMode
+            ? 'Ticket mis à jour avec succès !'
+            : 'Ticket créé avec succès !'
+        )
+      }
+      setLoading(false)
+    }
   }
 
   const getPriorityColor = () => {
@@ -223,7 +276,7 @@ export function TicketForm({ editMode = false, initialData }: TicketFormProps) {
         </Modal>
 
         <View style={styles.fieldContainer}>
-          <Text style={styles.label}>Due Date {!editMode && '(optional)'}</Text>
+          <Text style={styles.label}>Due Date</Text>
           <TouchableOpacity
             style={[styles.input, styles.dateButton]}
             onPress={() => setShowDatePicker(true)}
@@ -347,10 +400,13 @@ export function TicketForm({ editMode = false, initialData }: TicketFormProps) {
             </View>
           </>
         )}
-
-        <SubmitTicket
-          editMode={editMode}
-        />
+        {loading ? (
+          <View style={{ marginTop: 20, alignItems: 'center' }}>
+            <ActivityIndicator size="large" color="#0000ff" />
+          </View>
+        ) : (
+          <SubmitTicket handleSubmit={handleSubmit} editMode={editMode} />
+        )}
       </View>
     </ScrollView>
   )

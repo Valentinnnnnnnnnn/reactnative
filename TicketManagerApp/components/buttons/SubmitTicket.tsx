@@ -1,11 +1,14 @@
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity } from 'react-native'
 
-export function SubmitTicket({ editMode = false }: { editMode?: boolean }) {
-  function handleSubmit() {
-    // Logic to handle ticket submission
-    console.log('Ticket submitted')
-  }
+export function SubmitTicket({
+  handleSubmit,
+  editMode = false,
+}: {
+  handleSubmit: () => void
+  editMode?: boolean
+}) {
+  const [date, setDate] = React.useState<Date>(new Date())
 
   return (
     <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
@@ -17,7 +20,7 @@ export function SubmitTicket({ editMode = false }: { editMode?: boolean }) {
 }
 const styles = StyleSheet.create({
   submitButton: {
-    backgroundColor: '#3498db',
+    backgroundColor: '#007AFF',
     padding: 18,
     borderRadius: 12,
     alignItems: 'center',

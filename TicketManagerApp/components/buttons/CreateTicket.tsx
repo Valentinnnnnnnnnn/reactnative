@@ -2,13 +2,13 @@ import { useRouter } from 'expo-router'
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity } from 'react-native'
 
-export function CreateTicket({ redirect }: { redirect: () => void }) {
+export function CreateTicket() {
   const router = useRouter()
   return (
     <TouchableOpacity
       style={[styles.button, styles.bottomButton]}
       onPress={() => {
-        redirect()
+        router.push('./create')
       }}
       activeOpacity={0.8}
     >
