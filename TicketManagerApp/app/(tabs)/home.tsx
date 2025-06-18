@@ -3,11 +3,9 @@ import { StyleSheet, Text, View } from 'react-native'
 
 export default function Home() {
   return (
-    (
-      <View style={styles.container}>
-        <Text style={styles.title}>Home</Text>
-      </View>
-    )
+    <View style={styles.container}>
+      <Text style={styles.title}>Home</Text>
+    </View>
   )
 }
 

@@ -1,4 +1,4 @@
-import { signIn } from '@/services/firebase.auth'
+import { signIn } from '@/services/auth'
 import React from 'react'
 import { ActivityIndicator, Button, Text, TextInput, View } from 'react-native'
 
