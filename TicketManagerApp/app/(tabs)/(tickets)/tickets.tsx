@@ -1,3 +1,4 @@
+import { CreateTicket } from '@/components/buttons/CreateTicket'
 import { Ticket } from '@/components/ui/Ticket'
 import { db, getMyTickets } from '@/services/db'
 import { TicketType } from '@/types/ticket'
@@ -31,14 +32,17 @@ export default function Home() {
   }, [])
 
   return (
-
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <FlatList
-        data={tickets}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => <Ticket {...item} />}
-        contentContainerStyle={{ padding: 16 }}
-      />
-    </GestureHandlerRootView>
+    <>
+      <CreateTicket />
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <FlatList
+          data={tickets}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => <Ticket {...item} />}
+          contentContainerStyle={{ padding: 16 }}
+          style={{ top: 60 }}
+        />
+      </GestureHandlerRootView>
+    </>
   )
 }

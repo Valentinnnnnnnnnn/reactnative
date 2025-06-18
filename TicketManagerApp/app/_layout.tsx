@@ -5,7 +5,7 @@ import {
   DefaultTheme,
   ThemeProvider,
 } from '@react-navigation/native'
-import { Slot } from 'expo-router'
+import { Slot, Stack } from 'expo-router'
 import React from 'react'
 
 export default function RootLayout() {
@@ -14,7 +14,7 @@ export default function RootLayout() {
   return (
     <AuthProvider>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Slot />
+          <Slot />
       </ThemeProvider>
     </AuthProvider>
   )
