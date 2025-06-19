@@ -72,7 +72,7 @@ export async function updateTicket({
     await updateDoc(ticketRef, {
       ...ticketData,
       id: id,
-      updatedAt: new Date().toISOString(),
+      updatedAt: new Date(),
     })
   } catch (error) {
     console.error('Error updating ticket:', error)

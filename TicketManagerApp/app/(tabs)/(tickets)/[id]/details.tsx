@@ -1,6 +1,6 @@
 import { BackTo } from '@/components/buttons/BackTo'
 import { TicketDetails } from '@/components/ui/TicketDetails'
-import { db, getTicketById } from '@/services/db'
+import { getTicketById } from '@/services/db'
 import { TicketType } from '@/types/ticket'
 import { useLocalSearchParams } from 'expo-router'
 import React, { useEffect, useState } from 'react'
@@ -24,7 +24,7 @@ export default function TicketDetail() {
         setIsLoading(false)
       }
     }
-    if (!details) {
+    if (details?.id !== id) {
       fetchTicket()
     }
   }, [id])

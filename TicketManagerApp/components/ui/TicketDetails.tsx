@@ -12,22 +12,23 @@ import {
 } from 'react-native'
 
 export function TicketDetails({ ticketData }: { ticketData: TicketType }) {
+  const [data, setData] = useState(ticketData)
   const [comments, setComments] = useState<any[]>([])
   const [newComment, setNewComment] = useState('')
 
+  console.log('TicketDetails rendered with data:', ticketData.id)
   const router = useRouter()
   const handleEdit = () => {
     router.push(`/(tickets)/${ticketData.id}/edit`)
   }
 
-  const handleDelete = () => {
-  }
+  const handleDelete = () => {}
 
-  const handleAddComment = () => {
-  }
+  const handleAddComment = () => {}
 
   useEffect(() => {
-  }, [])
+    setData(ticketData)
+  }, [ticketData])
 
   return (
     <View style={styles.container}>

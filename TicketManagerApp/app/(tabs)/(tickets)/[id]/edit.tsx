@@ -23,7 +23,7 @@ export default function EditTicket() {
       setIsLoading(false)
     }
     fetchTicket()
-  }, [])
+  }, [id])
 
   if (error) {
     return (
