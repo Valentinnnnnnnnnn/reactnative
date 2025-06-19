@@ -22,7 +22,7 @@ export default function RootLayout() {
         >
           <Tabs.Screen name="tickets" options={{ title: 'Tickets' }} />
           <Tabs.Screen name="create" options={{ title: 'Create' }} />
-          <Tabs.Screen name="[id]" options={{ title: 'Ticket Detail' }} />
+          <Tabs.Screen name="[id]/details" options={{ title: 'Ticket Detail' }} />
         </Tabs>
       </ThemeProvider>
     </AuthProvider>

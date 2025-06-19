@@ -1,5 +1,6 @@
 import { BackTo } from '@/components/buttons/BackTo'
 import { TicketType } from '@/types/ticket'
+import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import {
   Button,
@@ -14,20 +15,18 @@ export function TicketDetails({ ticketData }: { ticketData: TicketType }) {
   const [comments, setComments] = useState<any[]>([])
   const [newComment, setNewComment] = useState('')
 
+  const router = useRouter()
   const handleEdit = () => {
-    // handle edit logic
+    router.push(`/(tickets)/${ticketData.id}/edit`)
   }
 
   const handleDelete = () => {
-    // handle delete logic
   }
 
   const handleAddComment = () => {
-    // add comment logic
   }
 
   useEffect(() => {
-    // fetch comments logic using your db service
   }, [])
 
   return (

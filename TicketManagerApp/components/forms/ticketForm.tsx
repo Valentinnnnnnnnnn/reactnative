@@ -1,6 +1,7 @@
 import { createTicket, db, updateTicket } from '@/services/db'
 import { categoryType, priorityType, statusType } from '@/types/ticket'
 import { TicketFormProps } from '@/types/ticketForm'
+import { router } from 'expo-router'
 import React, { useState } from 'react'
 import {
   ActivityIndicator,
@@ -26,7 +27,8 @@ export function TicketForm({ editMode = false, initialData }: TicketFormProps) {
   )
   const [dueDate, setDueDate] = useState<Date>(
     initialData?.dueDate
-      ? new Date(initialData.dueDate)
+      ? //@ts-ignore
+        new Date(initialData.dueDate.toDate())
       : new Date(new Date().setDate(new Date().getDate() + 7))
   )
   const [location, setLocation] = useState(initialData?.location || '')
@@ -77,31 +79,25 @@ export function TicketForm({ editMode = false, initialData }: TicketFormProps) {
 
     try {
       if (editMode) {
-        await updateTicket({ db, ticketData })
+        await updateTicket({ db, ticketData, id: initialData?.id })
       } else {
         await createTicket({ db, ticketData })
       }
-      // Optionnellement, réinitialisez le formulaire ou naviguez vers une autre page
-    } catch (error) {
-      console.error(error)
-      setError(
-        'Une erreur est survenue lors de la soumission du ticket.' + error
-      )
-    } finally {
-      if (error) {
-        setLoading(false)
-        alert(error)
-        return
-      } else {
-        resetData()
-        alert(
-          editMode
-            ? 'Ticket mis à jour avec succès !'
-            : 'Ticket créé avec succès !'
-        )
-      }
+    } catch (err) {
+      console.log('Error creating/updating ticket:' + err)
+      setError('Une erreur est survenue lors de la soumission du ticket.' + err)
       setLoading(false)
+      alert(err)
+      return
     }
+    resetData()
+    alert(
+      editMode ? 'Ticket mis à jour avec succès !' : 'Ticket créé avec succès !'
+    )
+    if (editMode) {
+      router.back()
+    }
+    setLoading(false)
   }
 
   const getPriorityColor = () => {
@@ -384,20 +380,21 @@ export function TicketForm({ editMode = false, initialData }: TicketFormProps) {
                 placeholderTextColor="#999"
               />
             </View>
-
-            <View style={styles.fieldContainer}>
-              <Text style={styles.label}>Device Info (optional)</Text>
-              <TextInput
-                value={deviceInfo}
-                onChangeText={setDeviceInfo}
-                placeholder="Enter device information"
-                multiline
-                numberOfLines={3}
-                style={[styles.input, styles.textArea]}
-                placeholderTextColor="#999"
-                textAlignVertical="top"
-              />
-            </View>
+            {false && ( // pas encore implémenté
+              <View style={styles.fieldContainer}>
+                <Text style={styles.label}>Device Info (optional)</Text>
+                <TextInput
+                  value={deviceInfo}
+                  onChangeText={setDeviceInfo}
+                  placeholder="Enter device information"
+                  multiline
+                  numberOfLines={3}
+                  style={[styles.input, styles.textArea]}
+                  placeholderTextColor="#999"
+                  textAlignVertical="top"
+                />
+              </View>
+            )}
           </>
         )}
         {loading ? (

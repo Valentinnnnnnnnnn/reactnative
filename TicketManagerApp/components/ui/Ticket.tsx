@@ -16,7 +16,7 @@ export function Ticket({ id, title, status, priority, category }: TicketType) {
         marginVertical: 8,
       }}
       onPress={() => {
-        router.push(`/(tickets)/${id}`)
+        router.push(`/(tickets)/${id}/details`)
       }}
     >
       <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 4 }}>

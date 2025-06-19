@@ -17,7 +17,18 @@ export async function getMyTickets(db: ReturnType<typeof getFirestore>) {
     const ticketsCollection = collection(db, 'tickets')
     const snapshot = await getDocs(ticketsCollection)
     const tickets = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
-    return tickets
+    const formattedTickets = tickets.filter((ticket) => {
+      if (ticket.id  === "") {
+        console.error('Ticket ID is empty:', ticket)
+        console.log(ticket)
+        return false;
+      }
+      else {
+        return true;
+      }
+    })
+
+    return formattedTickets
   } catch (error) {
     console.error('Error fetching tickets:', error)
     throw new Error('Error fetching tickets')
@@ -51,17 +62,20 @@ export async function createTicket({
 export async function updateTicket({
   db,
   ticketData,
+  id
 }: {
   db: ReturnType<typeof getFirestore>
   ticketData: TicketType
+  id?: string
 }) {
   try {
-    if (!ticketData.id) {
+    if (!id) {
       throw new Error('Ticket id is required for update.')
     }
-    const ticketRef = doc(db, 'tickets', ticketData.id)
+    const ticketRef = doc(db, 'tickets', id)
     await updateDoc(ticketRef, {
       ...ticketData,
+      id: id,
       updatedAt: new Date().toISOString(),
     })
   } catch (error) {

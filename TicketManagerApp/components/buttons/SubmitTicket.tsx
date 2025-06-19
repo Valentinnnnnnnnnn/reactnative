@@ -8,8 +8,6 @@ export function SubmitTicket({
   handleSubmit: () => void
   editMode?: boolean
 }) {
-  const [date, setDate] = React.useState<Date>(new Date())
-
   return (
     <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
       <Text style={styles.submitButtonText}>
