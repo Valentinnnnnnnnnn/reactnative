@@ -24,6 +24,25 @@ This simple ticket app is built with [Expo Router](https://expo.github.io/router
    npx expo start
    ```
 
+## Setup Firebase
+
+Requirements for Firebase setup:
+
+- A Firebase project with Firestore and Authentication enabled.
+- A web app registered in your Firebase project.
+- 2 collections in Firestore:
+  - `tickets`: to store ticket data
+  - `comments`: to store comments on tickets
+
+## Run the app using APK -- /!\ Unimplemented
+
+1. Download the APK and install it on your Android device. You can find the APK in the releases section of this repository. Make sure to enable installation from unknown sources in your device settings.
+
+2. Open the app on your device and log in with these credentials:
+
+   - Email: `test@test.fr`
+   - Password: `azerty`
+
 In the output, you'll find options to open the app in a
 
 - [development build](https://docs.expo.dev/develop/development-builds/introduction/)
