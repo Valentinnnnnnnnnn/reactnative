@@ -105,10 +105,8 @@ export async function getTicketById({
   }
 }
 
-export async function getStats(): Promise<{ label: string, value: number }[]> {
+export async function getStats(tickets:TicketType[]): Promise<{ label: string, value: number }[]> {
   try {
-    const tickets = await getMyTickets();
-
     if (!tickets || tickets.length === 0) {
       return [
         { label: 'Total Tickets', value: 0 },
