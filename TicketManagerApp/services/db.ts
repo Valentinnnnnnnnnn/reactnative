@@ -6,7 +6,8 @@ import {
   doc, getDoc,
   getDocs,
   getFirestore,
-  updateDoc
+  orderBy,
+  query, updateDoc, where
 } from 'firebase/firestore/lite'
 
 export const db = getFirestore(app)
@@ -101,5 +102,50 @@ export async function getTicketById({
   } catch (error) {
     console.error('Error fetching ticket by ID:', error)
     throw new Error('Error fetching ticket by ID')
+  }
+}
+
+export async function getCommentsByTicketId({
+  id,
+}: {
+  id: string
+}): Promise<any[]> {
+  try {
+    const commentsCollection = collection(db, 'comments')
+    const commentsQuery = query(
+      commentsCollection,
+      where('ticketId', '==', id),
+      orderBy('createdAt', 'desc')
+    )
+    const querySnapshot = await getDocs(commentsQuery)
+    return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data(), createdAt: doc.data().createdAt.toDate() }))
+  } catch (error) {
+    console.error('Error fetching comments:', error)
+    throw new Error('Error fetching comments')
+  }
+}
+
+export async function createComment({
+  ticketId, content, userId, createdAt
+}: {
+  ticketId: string; content: string; userId: string; createdAt?: Date 
+}) {
+  try {
+    if (auth.currentUser === null) {
+      throw new Error('User must be authenticated to create a comment.')
+    }
+
+    createdAt = new Date()
+    userId = auth.currentUser.email || 'unknown'
+
+    const commentsCollection = collection(db, 'comments')
+    await addDoc(commentsCollection, {
+      ticketId,
+      content,
+      userId,
+      createdAt,})
+  } catch (error) {
+    console.error('Error creating comment:', error)
+    throw new Error('Error creating comment')
   }
 }

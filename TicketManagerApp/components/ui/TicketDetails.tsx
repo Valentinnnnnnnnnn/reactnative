@@ -1,9 +1,12 @@
 import { BackTo } from '@/components/buttons/BackTo'
+import { createComment, getCommentsByTicketId } from '@/services/db'
 import { TicketType } from '@/types/ticket'
+import { AuthContext } from '@/utils/AuthProvider'
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import {
+  ActivityIndicator,
   FlatList,
   ScrollView,
   StyleSheet,
@@ -14,7 +17,9 @@ import {
 } from 'react-native'
 
 export function TicketDetails({ ticketData }: { ticketData: TicketType }) {
-  const [data, setData] = useState(ticketData)
+  const userId = useContext(AuthContext).user?.email
+  const [isPosting, setIsPosting] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [comments, setComments] = useState<any[]>([])
   const [newComment, setNewComment] = useState('')
 
@@ -26,11 +31,68 @@ export function TicketDetails({ ticketData }: { ticketData: TicketType }) {
 
   const handleDelete = () => {}
 
-  const handleAddComment = () => {}
+  const handleAddComment = async () => {
+    setIsPosting(true)
+    if (!newComment.trim()) {
+      alert('Comment cannot be empty.')
+      setIsPosting(false)
+      return
+    }
+
+    try {
+      await createComment({
+        ticketId: ticketData.id,
+        content: newComment,
+        userId: userId || 'Anonymous',
+      })
+      setNewComment('')
+      setComments((prevComments) => [
+        {
+          id : Date.now().toString(),
+          content: newComment,
+          userId: userId,
+          createdAt: new Date(),
+        },
+        ...prevComments,
+      ])
+    } catch (error) {
+      console.error('Error adding comment:', error)
+      alert('Error adding comment. Please try again later.')
+    }
+    setIsPosting(false)
+  }
 
   useEffect(() => {
-    setData(ticketData)
+    async function fetchComments() {
+      try {
+        const fetchedComments = await getCommentsByTicketId({
+          id: ticketData.id,
+        })
+        setComments(fetchedComments)
+      } catch (error) {
+        console.error('Error fetching comments:', error)
+        alert('Error fetching comments. Please try again later.')
+      }
+    }
+    setIsLoading(true)
+    fetchComments()
+    setIsLoading(false)
   }, [ticketData])
+
+  if (isLoading) {
+    return (
+      <>
+        <BackTo />
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+          <ActivityIndicator
+            size="large"
+            color="#007AFF"
+            style={{ marginTop: '80%', alignItems: 'center' }}
+          />
+        </ScrollView>
+      </>
+    )
+  }
 
   return (
     <>
@@ -161,10 +223,12 @@ export function TicketDetails({ ticketData }: { ticketData: TicketType }) {
               onChangeText={setNewComment}
               placeholder="Enter your comment"
               multiline
+              editable={!isPosting}
             />
             <TouchableOpacity
               style={styles.submitButton}
               onPress={handleAddComment}
+              disabled={isPosting}
             >
               <Ionicons name="send" size={18} color="white" />
               <Text style={styles.buttonText}>Submit</Text>
@@ -174,12 +238,26 @@ export function TicketDetails({ ticketData }: { ticketData: TicketType }) {
           {comments.length > 0 ? (
             <FlatList
               data={comments}
-              keyExtractor={(item) => item.id.toString()}
+              keyExtractor={(item) => item.id}
               renderItem={({ item }) => (
                 <View style={styles.comment}>
-                  <Text style={styles.commentText}>{item.text}</Text>
+                  <Text style={styles.commentText}>{item.content}</Text>
                   <Text style={styles.commentDate}>
-                    {item.createdAt.toDate().toLocaleString()}
+                    {`${item.userId} - ${new Date(item.createdAt)
+                      .toLocaleDateString('fr-FR', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric',
+                      })
+                      .replace(/^[a-z]/, (match) =>
+                        match.toUpperCase()
+                      )} ${new Date(item.createdAt).toLocaleTimeString(
+                      'fr-FR',
+                      {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      }
+                    )}`}
                   </Text>
                 </View>
               )}
