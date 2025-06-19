@@ -8,10 +8,10 @@
 
 2. Fill .env.exemple
 
-   Copy the `.env.example` file to `.env` and fill in the required environment variables. This file is used to configure your app's environment.
+   Copy the `.env.ts.exemple` file to `.env.ts` and fill in the required environment variables. This file is used to configure your app's environment settings.
 
    ```bash
-   cp .env.example .env
+   cp .env.ts.exemple .env.ts
    ```
 
 3. Start the app
