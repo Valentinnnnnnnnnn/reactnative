@@ -16,7 +16,6 @@ export async function getMyTickets() {
     const ticketsCollection = collection(db, 'tickets')
     const snapshot = await getDocs(ticketsCollection)
     const tickets = snapshot.docs.map((doc) => {
-      // Récupère le nom complet du document Firestore (son identifiant dans la collection)
       const documentName = doc.ref.path.split('/').pop()
       return { id: documentName, ...doc.data() } as TicketType
     })
