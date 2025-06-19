@@ -1,3 +1,7 @@
+## App presentation
+
+This simple ticket app is built with [Expo Router](https://expo.github.io/router/docs/) and [Expo SDK](https://docs.expo.dev/versions/latest/). It's using Firebase for authentication and Firestore for data storage.
+
 ## Get started
 
 1. Install dependencies

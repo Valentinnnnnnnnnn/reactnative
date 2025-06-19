@@ -82,10 +82,6 @@ export async function getTicketById({
     const ticketDoc = await getDoc(ticketRef)
     if (ticketDoc.exists()) {
       const data = ticketDoc.data()
-      data.createdAt = data.createdAt.seconds
-      data.updatedAt = data.updatedAt.seconds
-      data.dueDate = data.dueDate.seconds
-      console.log('Ticket fetched successfully:', data)
       return { id: ticketDoc.id, ...data } as TicketType
     } else {
       console.error('No such ticket!')

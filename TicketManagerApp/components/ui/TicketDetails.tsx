@@ -42,20 +42,23 @@ export function TicketDetails({ ticketData }: { ticketData: TicketType }) {
       <Text>
         Created at:{' '}
         {ticketData.createdAt
-          ? new Date(ticketData.createdAt).toLocaleString()
+          ? //@ts-ignore
+            ticketData.createdAt.toDate().toLocaleString()
           : 'N/A'}
       </Text>
       <Text>
         Updated at:{' '}
         {ticketData.updatedAt
-          ? new Date(ticketData.updatedAt).toLocaleString()
+          ? //@ts-ignore
+            ticketData.updatedAt.toDate().toLocaleString()
           : 'N/A'}
       </Text>
       {ticketData.assignedTo && (
         <Text>Assigned to: {ticketData.assignedTo}</Text>
       )}
       {ticketData.dueDate && (
-        <Text>Due Date: {new Date(ticketData.dueDate).toLocaleString()}</Text>
+        //@ts-ignore
+        <Text>Due Date: {ticketData.dueDate.toDate().toLocaleString()}</Text>
       )}
       {ticketData.location && <Text>Location: {ticketData.location}</Text>}
       {ticketData.deviceInfo && (
