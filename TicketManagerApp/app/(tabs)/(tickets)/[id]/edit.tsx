@@ -27,43 +27,49 @@ export default function EditTicket() {
 
   if (error) {
     return (
-      <SafeAreaView style={{ flex: 1 }}>
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-          <BackTo />
-          <ActivityIndicator
-            size="large"
-            color="#FF3B30"
-            style={{ marginTop: '80%', alignItems: 'center' }}
-          />
-          <Text style={{ color: 'red', textAlign: 'center', marginTop: 20 }}>
-            {error}
-          </Text>
-        </ScrollView>
-      </SafeAreaView>
+      <>
+        <BackTo />
+        <SafeAreaView style={{ flex: 1 }}>
+          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+            <ActivityIndicator
+              size="large"
+              color="#FF3B30"
+              style={{ marginTop: '80%', alignItems: 'center' }}
+            />
+            <Text style={{ color: 'red', textAlign: 'center', marginTop: 20 }}>
+              {error}
+            </Text>
+          </ScrollView>
+        </SafeAreaView>
+      </>
     )
   }
 
   if (isLoading || !ticket) {
     return (
-      <SafeAreaView style={{ flex: 1 }}>
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-          <BackTo />
-          <ActivityIndicator
-            size="large"
-            color="#007AFF"
-            style={{ marginTop: '80%', alignItems: 'center' }}
-          />
-        </ScrollView>
-      </SafeAreaView>
+      <>
+        <BackTo />
+        <SafeAreaView style={{ flex: 1 }}>
+          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+            <ActivityIndicator
+              size="large"
+              color="#007AFF"
+              style={{ marginTop: '80%', alignItems: 'center' }}
+            />
+          </ScrollView>
+        </SafeAreaView>
+      </>
     )
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        <BackTo />
-        <TicketForm editMode={true} initialData={ticket} />
-      </ScrollView>
-    </SafeAreaView>
+    <>
+      <BackTo />
+      <SafeAreaView style={{ flex: 1 }}>
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+          <TicketForm editMode={true} initialData={ticket} />
+        </ScrollView>
+      </SafeAreaView>
+    </>
   )
 }

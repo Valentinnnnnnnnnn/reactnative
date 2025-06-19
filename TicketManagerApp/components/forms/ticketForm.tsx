@@ -78,8 +78,10 @@ export function TicketForm({ editMode = false, initialData }: TicketFormProps) {
 
     try {
       if (editMode) {
+        //@ts-ignore
         await updateTicket({ ticketData, id: initialData?.id })
       } else {
+        //@ts-ignore
         await createTicket({ ticketData })
       }
     } catch (err) {

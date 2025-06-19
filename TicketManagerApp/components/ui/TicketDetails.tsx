@@ -1,13 +1,15 @@
 import { BackTo } from '@/components/buttons/BackTo'
 import { TicketType } from '@/types/ticket'
+import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import {
-  Button,
   FlatList,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from 'react-native'
 
@@ -16,8 +18,8 @@ export function TicketDetails({ ticketData }: { ticketData: TicketType }) {
   const [comments, setComments] = useState<any[]>([])
   const [newComment, setNewComment] = useState('')
 
-  console.log('TicketDetails rendered with data:', ticketData.id)
   const router = useRouter()
+
   const handleEdit = () => {
     router.push(`/(tickets)/${ticketData.id}/edit`)
   }
@@ -31,111 +33,323 @@ export function TicketDetails({ ticketData }: { ticketData: TicketType }) {
   }, [ticketData])
 
   return (
-    <View style={styles.container}>
+    <>
       <BackTo />
-      <Text style={styles.title}>{ticketData.title}</Text>
-      <Text>Description: {ticketData.description}</Text>
-      <Text>Status: {ticketData.status}</Text>
-      <Text>Priority: {ticketData.priority}</Text>
-      <Text>Category: {ticketData.category}</Text>
-      <Text>Created by: {ticketData.createdBy}</Text>
-      <Text>
-        Created at:{' '}
-        {ticketData.createdAt
-          ? //@ts-ignore
-            ticketData.createdAt.toDate().toLocaleString()
-          : 'N/A'}
-      </Text>
-      <Text>
-        Updated at:{' '}
-        {ticketData.updatedAt
-          ? //@ts-ignore
-            ticketData.updatedAt.toDate().toLocaleString()
-          : 'N/A'}
-      </Text>
-      {ticketData.assignedTo && (
-        <Text>Assigned to: {ticketData.assignedTo}</Text>
-      )}
-      {ticketData.dueDate && (
-        //@ts-ignore
-        <Text>Due Date: {ticketData.dueDate.toDate().toLocaleString()}</Text>
-      )}
-      {ticketData.location && <Text>Location: {ticketData.location}</Text>}
-      {ticketData.deviceInfo && (
-        <Text>Device Info: {JSON.stringify(ticketData.deviceInfo)}</Text>
-      )}
+      <ScrollView style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.title}>{ticketData.title}</Text>
+          <View style={styles.statusBadge}></View>
+          <Text style={styles.statusText}>{ticketData.status}</Text>
+        </View>
 
-      <View style={styles.buttonContainer}>
-        <Button title="Edit" onPress={handleEdit} />
-        <Button title="Delete" onPress={handleDelete} color="red" />
-      </View>
+        <View style={styles.card}>
+          <Text style={styles.sectionTitle}>Details</Text>
+          <View style={styles.detailRow}>
+            <Ionicons name="information-circle" size={20} color="#555" />
+            <Text style={styles.detailLabel}>Description:</Text>
+            <Text style={styles.detailText}>{ticketData.description}</Text>
+          </View>
+        </View>
 
-      <View style={styles.commentSection}>
-        <Text>Add Comment:</Text>
-        <TextInput
-          style={styles.input}
-          value={newComment}
-          onChangeText={setNewComment}
-          placeholder="Enter your comment"
-        />
-        <Button title="Submit Comment" onPress={handleAddComment} />
-      </View>
+        <View style={styles.detailRow}>
+          <Ionicons name="flag" size={20} color="#555" />
+          <Text style={styles.detailLabel}>Priority:</Text>
+          <Text
+            style={[
+              styles.detailText,
+              ticketData.priority === 'high'
+                ? styles.highPriority
+                : ticketData.priority === 'medium'
+                  ? styles.mediumPriority
+                  : styles.lowPriority,
+            ]}
+          >
+            {ticketData.priority}
+          </Text>
+        </View>
 
-      <View style={styles.commentsList}>
-        <Text>Comments:</Text>
-        <FlatList
-          data={comments}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <View style={styles.comment}>
-              <Text>{item.text}</Text>
-              <Text style={styles.commentDate}>
-                {item.createdAt.toDate().toLocaleString()}
-              </Text>
+        <View style={styles.detailRow}>
+          <Ionicons name="folder" size={20} color="#555" />
+          <Text style={styles.detailLabel}>Category:</Text>
+          <Text style={styles.detailText}>{ticketData.category}</Text>
+        </View>
+
+        <View style={styles.detailRow}>
+          <Ionicons name="person" size={20} color="#555" />
+          <Text style={styles.detailLabel}>Created by:</Text>
+          <Text style={styles.detailText}>{ticketData.createdBy}</Text>
+        </View>
+
+        <View style={styles.detailRow}>
+          <Ionicons name="calendar" size={20} color="#555" />
+          <Text style={styles.detailLabel}>Created at:</Text>
+          <Text style={styles.detailText}>
+            {ticketData.createdAt
+              ? //@ts-ignore
+                ticketData.createdAt.toDate().toLocaleString()
+              : 'N/A'}
+          </Text>
+        </View>
+
+        <View style={styles.detailRow}>
+          <Ionicons name="time" size={20} color="#555" />
+          <Text style={styles.detailLabel}>Updated at:</Text>
+          <Text style={styles.detailText}>
+            {ticketData.updatedAt
+              ? //@ts-ignore
+                ticketData.updatedAt.toDate().toLocaleString()
+              : 'N/A'}
+          </Text>
+        </View>
+
+        {ticketData.assignedTo && (
+          <View style={styles.detailRow}>
+            <Ionicons name="person-add" size={20} color="#555" />
+            <Text style={styles.detailLabel}>Assigned to:</Text>
+            <Text style={styles.detailText}>{ticketData.assignedTo}</Text>
+          </View>
+        )}
+
+        {ticketData.dueDate && (
+          <View style={styles.detailRow}>
+            <Ionicons name="alarm" size={20} color="#555" />
+            <Text style={styles.detailLabel}>Due Date:</Text>
+            <Text style={styles.detailText}>
+              {
+                //@ts-ignore
+                ticketData.dueDate.toDate().toLocaleString()
+              }
+            </Text>
+          </View>
+        )}
+
+        {ticketData.location && (
+          <View style={styles.detailRow}>
+            <Ionicons name="location" size={20} color="#555" />
+            <Text style={styles.detailLabel}>Location:</Text>
+            <Text style={styles.detailText}>{ticketData.location}</Text>
+          </View>
+        )}
+
+        {ticketData.deviceInfo && (
+          <View style={styles.detailRow}>
+            <Ionicons name="hardware-chip" size={20} color="#555" />
+            <Text style={styles.detailLabel}>Device Info:</Text>
+            <Text style={styles.detailText} numberOfLines={2}>
+              {JSON.stringify(ticketData.deviceInfo)}
+            </Text>
+          </View>
+        )}
+
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.editButton} onPress={handleEdit}>
+            <Ionicons name="create" size={18} color="white" />
+            <Text style={styles.buttonText}>Edit</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.deleteButton} onPress={handleDelete}>
+            <Ionicons name="trash" size={18} color="white" />
+            <Text style={styles.buttonText}>Delete</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.card}>
+          <Text style={styles.sectionTitle}>Comments</Text>
+          <View style={styles.commentInput}>
+            <TextInput
+              style={styles.input}
+              value={newComment}
+              onChangeText={setNewComment}
+              placeholder="Enter your comment"
+              multiline
+            />
+            <TouchableOpacity
+              style={styles.submitButton}
+              onPress={handleAddComment}
+            >
+              <Ionicons name="send" size={18} color="white" />
+              <Text style={styles.buttonText}>Submit</Text>
+            </TouchableOpacity>
+          </View>
+
+          {comments.length > 0 ? (
+            <FlatList
+              data={comments}
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={({ item }) => (
+                <View style={styles.comment}>
+                  <Text style={styles.commentText}>{item.text}</Text>
+                  <Text style={styles.commentDate}>
+                    {item.createdAt.toDate().toLocaleString()}
+                  </Text>
+                </View>
+              )}
+              scrollEnabled={false}
+            />
+          ) : (
+            <View style={styles.noComments}>
+              <Ionicons
+                name="chatbubble-ellipses-outline"
+                size={24}
+                color="#aaa"
+              />
+              <Text style={styles.noCommentsText}>No comments yet</Text>
             </View>
           )}
-        />
-      </View>
-    </View>
+        </View>
+      </ScrollView>
+    </>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingLeft: 4,
-    marginTop: 60,
+    backgroundColor: '#f5f5f7',
+    paddingHorizontal: 16,
+  },
+  header: {
+    marginBottom: 16,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 8,
+    color: '#1c1c1e',
+    marginVertical: 8,
+  },
+  statusBadge: {
+    backgroundColor: '#4CAF50',
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 16,
+    alignSelf: 'flex-start',
+    marginBottom: 12,
+  },
+  statusText: {
+    color: 'white',
+    fontWeight: '600',
+    fontSize: 14,
+  },
+  card: {
+    backgroundColor: 'white',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 16,
+    color: '#1c1c1e',
+  },
+  detailRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+    flexWrap: 'wrap',
+  },
+  detailLabel: {
+    fontWeight: '600',
+    color: '#555',
+    marginLeft: 8,
+    marginRight: 6,
+  },
+  detailText: {
+    flex: 1,
+    color: '#333',
+  },
+  highPriority: {
+    color: '#E53935',
+    fontWeight: 'bold',
+  },
+  mediumPriority: {
+    color: '#FB8C00',
+    fontWeight: 'bold',
+  },
+  lowPriority: {
+    color: '#43A047',
+    fontWeight: 'bold',
   },
   buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginVertical: 16,
+    justifyContent: 'space-between',
+    marginBottom: 16,
   },
-  commentSection: {
-    marginVertical: 16,
+  editButton: {
+    backgroundColor: '#2196F3',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    marginRight: 8,
+  },
+  deleteButton: {
+    backgroundColor: '#F44336',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    marginLeft: 8,
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: '600',
+    marginLeft: 6,
+  },
+  commentInput: {
+    marginBottom: 16,
   },
   input: {
-    height: 40,
-    borderColor: '#ccc',
+    borderColor: '#ddd',
     borderWidth: 1,
-    paddingHorizontal: 8,
-    marginVertical: 8,
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 12,
+    backgroundColor: '#fff',
+    minHeight: 80,
   },
-  commentsList: {
-    marginVertical: 16,
+  submitButton: {
+    backgroundColor: '#4CAF50',
+    paddingVertical: 12,
+    borderRadius: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   comment: {
-    padding: 8,
-    borderBottomColor: '#eee',
-    borderBottomWidth: 1,
+    padding: 12,
+    borderRadius: 8,
+    backgroundColor: '#f0f2f5',
+    marginBottom: 12,
+  },
+  commentText: {
+    fontSize: 15,
+    color: '#333',
+    marginBottom: 6,
   },
   commentDate: {
-    fontSize: 10,
+    fontSize: 12,
     color: '#888',
+    textAlign: 'right',
+  },
+  noComments: {
+    alignItems: 'center',
+    paddingVertical: 24,
+    opacity: 0.7,
+  },
+  noCommentsText: {
+    marginTop: 8,
+    color: '#888',
+    fontSize: 16,
   },
 })

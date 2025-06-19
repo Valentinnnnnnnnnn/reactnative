@@ -10,15 +10,17 @@ export function BackTo() {
       style={{
         alignSelf: 'flex-start',
         width: '100%',
+        backgroundColor: 'transparent',
       }}
     >
       <Text
         style={{
           textAlign: 'left',
-          paddingLeft: 20,
-          paddingTop: 5,
+          paddingTop: 60,
           color: '#007AFF',
           fontSize: 16,
+          paddingBottom: 10,
+          paddingHorizontal: 10,
         }}
       >
         {'< Back to tickets'}
