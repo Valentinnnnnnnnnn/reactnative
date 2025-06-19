@@ -1,6 +1,6 @@
 import StatsBox from '@/components/ui/statsBox'
-import { getStats } from '@/services/db'
 import { statType } from '@/types/stat'
+import { getStats } from '@/utils/Stats'
 import { TicketContext } from '@/utils/TicketContext'
 import React, { useContext } from 'react'
 import { RefreshControl, View } from 'react-native'
@@ -30,7 +30,7 @@ export default function Home() {
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1}}>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <ScrollView
         refreshControl={
           <RefreshControl
