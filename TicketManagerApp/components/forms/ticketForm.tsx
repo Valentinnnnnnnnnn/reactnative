@@ -1,4 +1,4 @@
-import { createTicket, db, updateTicket } from '@/services/db'
+import { createTicket, updateTicket } from '@/services/db'
 import { categoryType, priorityType, statusType } from '@/types/ticket'
 import { TicketFormProps } from '@/types/ticketForm'
 import { router } from 'expo-router'
@@ -65,7 +65,6 @@ export function TicketForm({ editMode = false, initialData }: TicketFormProps) {
     }
 
     const ticketData = {
-      id: '',
       title,
       description,
       priority,
