@@ -1,6 +1,6 @@
 import { BackTo } from '@/components/buttons/BackTo'
 import { TicketForm } from '@/components/forms/ticketForm'
-import { db, getTicketById } from '@/services/db'
+import { getTicketById } from '@/services/db'
 import { useLocalSearchParams } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { ActivityIndicator, SafeAreaView, ScrollView, Text } from 'react-native'
@@ -16,7 +16,7 @@ export default function EditTicket() {
     async function fetchTicket() {
       setError(null)
       try {
-        setTicket(await getTicketById({ id, db }))
+        setTicket(await getTicketById({ id }))
       } catch (error) {
         setError('Error fetching ticket: ' + error)
       }

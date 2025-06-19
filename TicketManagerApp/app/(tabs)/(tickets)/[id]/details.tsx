@@ -16,7 +16,7 @@ export default function TicketDetail() {
     async function fetchTicket() {
       setIsLoading(true)
       try {
-        const ticket = await getTicketById({ id, db })
+        const ticket = await getTicketById({ id })
         setDetails(ticket)
       } catch (error) {
         setError('Error fetching ticket' + error)

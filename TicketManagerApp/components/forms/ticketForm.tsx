@@ -79,9 +79,9 @@ export function TicketForm({ editMode = false, initialData }: TicketFormProps) {
 
     try {
       if (editMode) {
-        await updateTicket({ db, ticketData, id: initialData?.id })
+        await updateTicket({ ticketData, id: initialData?.id })
       } else {
-        await createTicket({ db, ticketData })
+        await createTicket({ ticketData })
       }
     } catch (err) {
       console.log('Error creating/updating ticket:' + err)

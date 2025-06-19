@@ -15,7 +15,7 @@ export default function Home() {
     setTickets([])
     setIsLoading(true)
     try {
-      const data = await getMyTickets(db)
+      const data = await getMyTickets()
       setTickets((prevTickets) => {
         return data.map((ticket) => {
           const t = ticket as TicketType
