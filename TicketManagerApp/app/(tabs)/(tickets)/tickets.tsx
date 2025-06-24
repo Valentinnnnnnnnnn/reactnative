@@ -7,7 +7,7 @@ import { FlatList, GestureHandlerRootView } from 'react-native-gesture-handler'
 
 export default function Home() {
   const { tickets, isLoading, loadTickets } = useContext(TicketContext)
-  const [refreshing, setRefreshing] = React.useState(false)
+  const [refreshing] = React.useState(false)
 
   if (refreshing || isLoading) {
     return (

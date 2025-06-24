@@ -15,10 +15,8 @@ export default function Login() {
     setIsLoading(true)
     try {
       await signIn(email, password)
-    } catch (error) {
-      setError(
-        'Login failed. Please check your credentials or contact your administrator.'
-      )
+    } catch (err) {
+      setError(String(err))
     }
     setIsLoading(false)
   }

@@ -59,7 +59,8 @@ export function TicketForm({ editMode = false, initialData }: TicketFormProps) {
     setError('')
 
     if (!title.trim() || !description.trim()) {
-      alert('Veuillez remplir tous les champs obligatoires.')
+      setError('Title and description are required.')
+      alert('Title and description are required.')
       setLoading(false)
       return
     }
