@@ -48,7 +48,7 @@ export function TicketDetails({ ticketData }: { ticketData: TicketType }) {
       setNewComment('')
       setComments((prevComments) => [
         {
-          id : Date.now().toString(),
+          id: Date.now().toString(),
           content: newComment,
           userId: userId,
           createdAt: new Date(),

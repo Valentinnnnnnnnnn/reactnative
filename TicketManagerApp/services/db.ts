@@ -3,11 +3,14 @@ import { TicketType } from '@/types/ticket'
 import {
   addDoc,
   collection,
-  doc, getDoc,
+  doc,
+  getDoc,
   getDocs,
   getFirestore,
   orderBy,
-  query, updateDoc, where
+  query,
+  updateDoc,
+  where,
 } from 'firebase/firestore/lite'
 
 export const db = getFirestore(app)
@@ -21,12 +24,12 @@ export async function getMyTickets() {
       return { id: documentName, ...doc.data() } as TicketType
     })
     const formattedTickets = tickets.filter((ticket) => {
-      if (ticket.id === "") {
+      if (ticket.id === '') {
         console.error('Ticket ID is empty:', ticket)
         console.log(ticket)
-        return false;
+        return false
       }
-      return true;
+      return true
     })
 
     return formattedTickets
@@ -36,11 +39,7 @@ export async function getMyTickets() {
   }
 }
 
-export async function createTicket({
-  ticketData,
-}: {
-  ticketData: TicketType
-}) {
+export async function createTicket({ ticketData }: { ticketData: TicketType }) {
   try {
     if (auth.currentUser === null) {
       throw new Error('User must be authenticated to create a ticket.')
@@ -60,7 +59,7 @@ export async function createTicket({
 
 export async function updateTicket({
   ticketData,
-  id
+  id,
 }: {
   ticketData: TicketType
   id?: string
@@ -80,9 +79,6 @@ export async function updateTicket({
     throw new Error('Error updating ticket')
   }
 }
-
-
-
 
 export async function getTicketById({
   id,
@@ -118,7 +114,11 @@ export async function getCommentsByTicketId({
       orderBy('createdAt', 'desc')
     )
     const querySnapshot = await getDocs(commentsQuery)
-    return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data(), createdAt: doc.data().createdAt.toDate() }))
+    return querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+      createdAt: doc.data().createdAt.toDate(),
+    }))
   } catch (error) {
     console.error('Error fetching comments:', error)
     throw new Error('Error fetching comments')
@@ -126,9 +126,15 @@ export async function getCommentsByTicketId({
 }
 
 export async function createComment({
-  ticketId, content, userId, createdAt
+  ticketId,
+  content,
+  userId,
+  createdAt,
 }: {
-  ticketId: string; content: string; userId: string; createdAt?: Date 
+  ticketId: string
+  content: string
+  userId: string
+  createdAt?: Date
 }) {
   try {
     if (auth.currentUser === null) {
@@ -143,7 +149,8 @@ export async function createComment({
       ticketId,
       content,
       userId,
-      createdAt,})
+      createdAt,
+    })
   } catch (error) {
     console.error('Error creating comment:', error)
     throw new Error('Error creating comment')

@@ -10,22 +10,20 @@ export default function TabsLayout() {
   const [tickets, setTickets] = React.useState<TicketType[]>([])
 
   async function loadTickets() {
-    setTickets([])
     setIsLoading(true)
     try {
       const data = await getMyTickets()
-      setTickets(() =>
-        data.map((ticket) => {
-          const t = ticket as TicketType
-          return {
-            ...t,
-            title: t.title,
-            status: t.status,
-            priority: t.priority,
-            category: t.category,
-          }
-        })
-      )
+      const newTickets = data.map((ticket) => {
+        const t = ticket as TicketType
+        return {
+          ...t,
+          title: t.title,
+          status: t.status,
+          priority: t.priority,
+          category: t.category,
+        }
+      })
+      setTickets(newTickets)
     } catch (error) {
       console.error('Error loading tickets:', error)
       alert('Error loading tickets. Please try again later.')

@@ -1,4 +1,4 @@
-import { TicketContextType } from '@/types/TicketContextType'
+import { TicketContextType } from '@/types/ticketContextType'
 import { createContext } from 'react'
 
 export const TicketContext = createContext<TicketContextType>({

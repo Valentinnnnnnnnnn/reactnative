@@ -38,7 +38,7 @@ export default function Home() {
             onRefresh={loadTickets}
             colors={['grey']}
             progressBackgroundColor={'black'}
-            enabled={!isCalculating || !isLoading}
+            enabled={!isCalculating && !isLoading}
             progressViewOffset={30}
           />
         }
