@@ -34,20 +34,16 @@ Requirements for Firebase setup:
   - `tickets`: to store ticket data
   - `comments`: to store comments on tickets
 
-## Run the app using APK -- /!\ Unimplemented
+You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
-1. Download the APK and install it on your Android device. You can find the APK in the releases section of this repository. Make sure to enable installation from unknown sources in your device settings.
+## Run the app using APK (Android only, do not need to run the previous steps)
+
+1. Download the APK and install it on your Android device. You can find the APK in the [releases section](https://github.com/Valentinnnnnnnnnn/reactnative/releases/latest) of this repository.
+   Make sure to enable installation from unknown sources in your device settings.
 
 2. Open the app on your device and log in with these credentials:
 
    - Email: `test@test.fr`
    - Password: `azerty`
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+3. You can now use the app to create, view, and manage tickets.
